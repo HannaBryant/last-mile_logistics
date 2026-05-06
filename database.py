@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2.extras import RealDictCursor
 import os
 from dotenv import load_dotenv
 
@@ -21,41 +22,41 @@ def init_db():
     cur = conn.cursor()
     
     cur.execute("""
-              create table if not exists driver (
+              create table if not exists lmlogistics.driver (
                 driver_id serial primary key,
                 name varchar(100),
                 license_type varchar(50)
                 );
                 
-                create table if not exists vehicle (
+                create table if not exists lmlogistics.vehicle (
                 vehicle_id serial primary key,
                 license_plate varchar(20) unique,
                 model varchar(50),
                 driver_id int unique,
-                foreign key (driver_id) references driver(driver_id)
+                foreign key (driver_id) references lmlogistics.driver(driver_id)
                 );
                 
-                create table if not exists route (
+                create table if not exists lmlogistics.route (
                 route_id serial primary key,
                 date date,
                 service_zone varchar(100),
                 driver_id int,
-                foreign key (driver_id) references driver(driver_id)
+                foreign key (driver_id) references lmlogistics.driver(driver_id)
                 );
                 
-                create table if not exists package (
+                create table if not exists lmlogistics.package (
                 package_id serial primary key,
                 description varchar(250),
                 weight decimal(10,2) check (weight > 0),
                 route_id int,
-                foreign key (route_id) references route(route_id)
+                foreign key (route_id) references lmlogistics.route(route_id)
                 );
                 """)
     
     conn.commit()
     cur.close()
     conn.close()
-    print("Table Created✅")
+    print("complete!")
 #====================================================================================
 
 #==============CRUD==================================================================
@@ -66,7 +67,7 @@ def create_driver(name, license_type):
     cur = conn.cursor()
 
     cur.execute(
-       "insert into driver (name, license_type) values (%s, %s)",
+       "insert into lmlogistics.driver (name, license_type) values (%s, %s)",
        (name, license_type)
     )
     conn.commit()
@@ -75,9 +76,9 @@ def create_driver(name, license_type):
 
 def get_drivers():
    conn = get_connection()
-   cur = conn.cursor()
+   cur = conn.cursor(cursor_factory=RealDictCursor)
 
-   cur.execute("select * from driver")
+   cur.execute("select * from lmlogistics.driver")
    data = cur.fetchall()
 
    cur.close()
@@ -91,7 +92,7 @@ def create_vehicle(license_plate, model, driver_id):
     cur = conn.cursor()
 
     cur.execute("""
-        insert into vehicle (license_plate, model, driver_id)
+        insert into lmlogistics.vehicle (license_plate, model, driver_id)
         values  (%s, %s, %s)
     """, (license_plate, model, driver_id))
 
@@ -102,9 +103,9 @@ def create_vehicle(license_plate, model, driver_id):
 
 def get_vehicles():
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("select * from vehicle")
+    cur.execute("select * from lmlogistics.vehicle")
     data = cur.fetchall()
 
     cur.close()
@@ -118,7 +119,7 @@ def create_route(date, service_zone, driver_id):
     cur = conn.cursor()
 
     cur.execute("""
-        insert into route (date, service_zone, driver_id)
+        insert into lmlogistics.route (date, service_zone, driver_id)
         values  (%s, %s, %s)
     """, (date, service_zone, driver_id))
 
@@ -129,9 +130,9 @@ def create_route(date, service_zone, driver_id):
 
 def get_routes():
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("select * from route")
+    cur.execute("select * from lmlogistics.route")
     data = cur.fetchall()
 
     cur.close()
@@ -146,7 +147,7 @@ def create_package(description, weight, route_id):
     cur = conn.cursor()
 
     cur.execute("""
-        insert into package (description, weight, route_id)
+        insert into lmlogistics.package (description, weight, route_id)
         values  (%s, %s, %s)
     """, (description, weight, route_id))
 
@@ -157,9 +158,9 @@ def create_package(description, weight, route_id):
 
 def get_packages():
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    cur.execute("select * from package")
+    cur.execute("select * from lmlogistics.package")
     data = cur.fetchall()
 
     cur.close()

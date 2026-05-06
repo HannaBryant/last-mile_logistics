@@ -15,7 +15,7 @@ def home():
 
 @app.route("/drivers", methods=["GET"])
 def drivers():
-    return jsonify(get_drivers())
+    return jsonify(get_drivers()), 200
 
 @app.route("/drivers", methods=["POST"])
 def add_driver():
@@ -25,7 +25,7 @@ def add_driver():
 
 @app.route("/vehicles", methods=["GET"])
 def vehicles():
-    return jsonify(get_vehicles())
+    return jsonify(get_vehicles()), 200
 
 @app.route("/vehicles", methods=["POST"])
 def add_vehicle():
@@ -39,7 +39,7 @@ def add_vehicle():
 
 @app.route("/routes", methods=["GET"])
 def routes():
-    return jsonify(get_routes())
+    return jsonify(get_routes()), 200
 
 @app.route("/routes", methods=["POST"])
 def add_route():
@@ -53,7 +53,7 @@ def add_route():
 
 @app.route("/packages", methods=["GET"])
 def packages():
-    return jsonify(get_packages())
+    return jsonify(get_packages()), 200
 
 @app.route("/packages", methods=["POST"])
 def add_package():

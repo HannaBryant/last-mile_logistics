@@ -87,6 +87,29 @@ def get_drivers():
    conn.close()
    return data
 
+def update_driver(driver_id, name, license_type):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""update driver set name=%s, license_type=%s where driver_id=%s""",
+    (name, license_type, driver_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def delete_driver(driver_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("""delete from driver where driver_id=%s""", (driver_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+
 
 #VEHICLE============================
 def create_vehicle(license_plate, model, driver_id):
@@ -114,6 +137,27 @@ def get_vehicles():
     conn.close()
     return data
 
+def update_vehicle(vehicle_id, license_plate, model):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(""" update vehicle set license_plate=%s, model=%s where vehicle_id=%s""",
+    (license_plate, model, vehicle_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def delete_vehicle(vehicle_id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(""" delete from vehicle where vehicle_id=%s """, (vehicle_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
 #ROUTE=================
 
 def create_route(date, service_zone, driver_id):
@@ -140,6 +184,41 @@ def get_routes():
     cur.close()
     conn.close()
     return data
+
+def update_route(route_id, service_zone):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        update route
+        set service_zone=%s
+        where route_id=%s
+        """,
+        (service_zone, route_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def delete_route(route_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        delete from route
+        where route_id=%s
+        """,
+        (route_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
     #PACKAGE==============
@@ -169,3 +248,37 @@ def get_packages():
     conn.close()
     return data
 
+def update_package(package_id, description, weight):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        update package
+        set description=%s, weight=%s
+        where package_id=%s
+        """,
+        (description, weight, package_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def delete_package(package_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        delete from package
+        where package_id=%s
+        """,
+        (package_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()

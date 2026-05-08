@@ -20,7 +20,9 @@ def get_connection():
 def init_db():
     conn = get_connection()
     cur = conn.cursor()
-    
+
+    cur.execute("create schema if not exists lmlogistics;")
+
     cur.execute("""
               create table if not exists lmlogistics.driver (
                 driver_id serial primary key,

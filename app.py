@@ -1,17 +1,16 @@
-from flask import Flask, jsonify, request
-from database import ( 
+from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS
+from database import (
     init_db,
-      create_driver, get_drivers,
-       create_vehicle, get_vehicles,
-        create_route, get_routes,
-         create_package, get_packages 
-         )
+    create_driver, get_drivers, update_driver, delete_driver,
+    create_vehicle, get_vehicles, update_vehicle, delete_vehicle,
+    create_route, get_routes, update_route, delete_route,
+    create_package, get_packages, update_package, delete_package
+)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
+CORS(app)
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Last Mile Logistics Online"})
 
 @app.route("/drivers", methods=["GET"])
 def drivers():
@@ -143,6 +142,11 @@ def remove_package(package_id):
     delete_package(package_id)
 
     return {"message": "Package deleted successfully"}
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_react(path):
+    return render_template("index.html")
 
 if __name__ == "__main__":
     init_db()
